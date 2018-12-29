@@ -10,6 +10,8 @@ class Config(object):
     # Keywords are used for defining what you're looking for (i.e. company name)
 
     # You can give an absolute path -- if you do, comment out the current KEYWORDS_FILE
+    # If running a cron outside of your home directory, I recommend specifying the full path
+
     # KEYWORDS_FILE = "/path/to/keywords/file.txt"
     
     # Or you can edit the existing keywords.txt 
@@ -37,11 +39,14 @@ class Config(object):
     # Set to true to store in Mongodb
     MONGO = False
     MONGO_PORT = 27017
+    MONGO_DB_NAME = 'pastebin_scraper'
     # Of course, replace localhost with remote host if necessary
+    # Mongo times out for me when the port isn't an int, so here we are
     MONGO_URL = 'mongodb://localhost:%i' %(MONGO_PORT)
+    
 
     # If the database requires authentication:
     # MONGO_URL = 'mongodb://username:password@host:%i' %(MONGO_PORT)
 
-    MONGO_DB_NAME = 'pastebin_scraper'
+    
     
