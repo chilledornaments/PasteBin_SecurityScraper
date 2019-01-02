@@ -46,7 +46,10 @@ class Config(object):
     
 
     # If the database requires authentication:
-    # MONGO_URL = 'mongodb://username:password@host:%i' %(MONGO_PORT)
+    # MONGO_URL = 'mongodb://username:password@host:%i/authDB' %(MONGO_PORT)
+    # For example, if you created a the user "heyitsme" with a password of "yourbrother"
+    # Who uses the database "hunter2" for auth, on localhost, your config would look like this:
+    # MONGO_URL = 'mongodb://heyitsme:yourbrother:@localhost:%i/hunter2
 
     
     
