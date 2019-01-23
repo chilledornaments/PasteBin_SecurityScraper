@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import requests, json, threading, time
-from queue import Queue
+
 try:
     import config
     print("imported config")
@@ -20,17 +20,26 @@ def PB_Scraper():
     NEW_PASTES = requests.get(CONFIG.PASTEBIN_API_URL)
     NEW_PASTES_JSON = json.loads(NEW_PASTES.text)
     
+    PASTE_LIST = []
     for new_post in NEW_PASTES_JSON:
         NEW_PASTE_KEY = new_post['key']
         PASTE_TO_CHECK = CONFIG.PASTEBIN_PASTE_URL+NEW_PASTE_KEY
         RAW_PASTE = requests.get(PASTE_TO_CHECK).text.lower()
         for KEYWORD in CONFIG.KEYWORD_LIST:
             if KEYWORD in RAW_PASTE:
-                print("{} found in: {}".format(KEYWORD, str(PASTE_TO_CHECK)))
-                if CONFIG.SLACK:
-                    SlackAlert(KEYWORD, PASTE_TO_CHECK)
-                if CONFIG.MONGO:
-                    mongoConnection_.MongoPost_(KEYWORD, PASTE_TO_CHECK, RAW_PASTE)
+                if PASTE_TO_CHECK in PASTE_LIST:
+                    pass
+                else:
+                    print("{} found in: {}".format(KEYWORD, str(PASTE_TO_CHECK)))
+                    PASTE_LIST.append(PASTE_TO_CHECK)
+                
+                    if CONFIG.SLACK:
+                        SlackAlert(KEYWORD, PASTE_TO_CHECK)
+                    if CONFIG.MONGO:
+                        mongoConnection_.MongoPost_(KEYWORD, PASTE_TO_CHECK, RAW_PASTE)
+            else:
+                pass
+    print("Finished")             
 
 if CONFIG.SLACK:
     def SlackAlert(KEYWORD, PASTEBIN_URL):
